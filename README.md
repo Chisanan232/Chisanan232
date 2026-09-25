@@ -13,7 +13,7 @@ I build the layers between what AI agents claim and what systems can verify.
 
 ## What exists today
 
-### 🔬 Fornax — evidence-first agent integrity
+### 🧪 Fornax — evidence-first agent integrity
 
 **What should I believe about what this agent told me, given the evidence actually available?**
 
