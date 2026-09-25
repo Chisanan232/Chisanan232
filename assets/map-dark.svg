@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 160" width="760" height="160" role="img" aria-label="Engineering map showing how five projects relate across question, observe, verify, constrain, and authorize phases">
+  <!-- Background: transparent, dark-theme optimized -->
+
+  <!-- Title -->
+  <text x="380" y="20" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="11" fill="#64748b" text-anchor="middle" letter-spacing="2">AI AGENT INTEGRITY INFRASTRUCTURE</text>
+
+  <!-- Concept row: 5 boxes -->
+  <!-- 1: QUESTION -->
+  <rect x="10" y="34" width="128" height="46" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <text x="74" y="53" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="10" fill="#94a3b8" text-anchor="middle" letter-spacing="1.5" font-weight="600">QUESTION</text>
+  <text x="74" y="68" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9.5" fill="#64748b" text-anchor="middle">should it exist?</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="140" y1="57" x2="158" y2="57" stroke="#475569" stroke-width="1.5"/>
+  <polygon points="158,53 166,57 158,61" fill="#475569"/>
+
+  <!-- 2: OBSERVE -->
+  <rect x="168" y="34" width="128" height="46" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <text x="232" y="53" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="10" fill="#94a3b8" text-anchor="middle" letter-spacing="1.5" font-weight="600">OBSERVE</text>
+  <text x="232" y="68" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9.5" fill="#64748b" text-anchor="middle">what did it do?</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="298" y1="57" x2="316" y2="57" stroke="#475569" stroke-width="1.5"/>
+  <polygon points="316,53 324,57 316,61" fill="#475569"/>
+
+  <!-- 3: VERIFY -->
+  <rect x="326" y="34" width="128" height="46" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <text x="390" y="53" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="10" fill="#94a3b8" text-anchor="middle" letter-spacing="1.5" font-weight="600">VERIFY</text>
+  <text x="390" y="68" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9.5" fill="#64748b" text-anchor="middle">did it match claims?</text>
+
+  <!-- Arrow 3→4 -->
+  <line x1="456" y1="57" x2="474" y2="57" stroke="#475569" stroke-width="1.5"/>
+  <polygon points="474,53 482,57 474,61" fill="#475569"/>
+
+  <!-- 4: CONSTRAIN -->
+  <rect x="484" y="34" width="128" height="46" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <text x="548" y="53" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="10" fill="#94a3b8" text-anchor="middle" letter-spacing="1.5" font-weight="600">CONSTRAIN</text>
+  <text x="548" y="68" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9.5" fill="#64748b" text-anchor="middle">what is it allowed?</text>
+
+  <!-- Arrow 4→5 -->
+  <line x1="614" y1="57" x2="632" y2="57" stroke="#475569" stroke-width="1.5"/>
+  <polygon points="632,53 640,57 632,61" fill="#475569"/>
+
+  <!-- 5: AUTHORIZE -->
+  <rect x="642" y="34" width="108" height="46" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <text x="696" y="53" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="10" fill="#94a3b8" text-anchor="middle" letter-spacing="1.5" font-weight="600">AUTHORIZE</text>
+  <text x="696" y="68" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9.5" fill="#64748b" text-anchor="middle">what can it access?</text>
+
+  <!-- Project labels row -->
+  <text x="74" y="104" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="10.5" fill="#e2e8f0" text-anchor="middle" font-weight="700">requirement-zero</text>
+
+  <text x="232" y="104" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="10.5" fill="#e2e8f0" text-anchor="middle" font-weight="700">fornax-core</text>
+  <text x="390" y="104" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="10.5" fill="#e2e8f0" text-anchor="middle" font-weight="700">fornax-core</text>
+
+  <text x="548" y="100" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="10.5" fill="#e2e8f0" text-anchor="middle" font-weight="700">agent-assembly</text>
+  <text x="548" y="116" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="10.5" fill="#e2e8f0" text-anchor="middle" font-weight="700">glomeris</text>
+
+  <text x="696" y="104" font-family="ui-monospace, 'SFMono-Regular', Consolas, monospace" font-size="10.5" fill="#e2e8f0" text-anchor="middle" font-weight="700">eltanin</text>
+
+  <!-- Connector lines from boxes to labels -->
+  <line x1="74" y1="80" x2="74" y2="93" stroke="#334155" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="232" y1="80" x2="232" y2="93" stroke="#334155" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="390" y1="80" x2="390" y2="93" stroke="#334155" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="548" y1="80" x2="548" y2="93" stroke="#334155" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="696" y1="80" x2="696" y2="93" stroke="#334155" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- org/account labels -->
+  <text x="74" y="138" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9" fill="#475569" text-anchor="middle">Chisanan232</text>
+  <text x="311" y="138" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9" fill="#475569" text-anchor="middle">horonomy</text>
+  <text x="548" y="138" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9" fill="#475569" text-anchor="middle">ai-agent-assembly / Chisanan232</text>
+  <text x="696" y="138" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9" fill="#475569" text-anchor="middle">horonomy</text>
+</svg>
