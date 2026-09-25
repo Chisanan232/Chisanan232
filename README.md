@@ -4,7 +4,7 @@ I build the layers between what AI agents claim and what systems can verify.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/map-dark.svg">
-  <img src="assets/map-light.svg" alt="Engineering map: QUESTION → OBSERVE → VERIFY → CONSTRAIN → AUTHORIZE, with requirement-zero, fornax-core, agent-assembly, glomeris, and eltanin mapped to each phase" width="760">
+  <img src="assets/map-light.svg" alt="Four engineering questions mapped to projects: DECIDE → requirement-zero, VERIFY → fornax-core, GOVERN → agent-assembly + glomeris, AUTHORIZE → eltanin" width="760">
 </picture>
 
 <br>
@@ -15,186 +15,91 @@ I build the layers between what AI agents claim and what systems can verify.
 
 ### 🧪 Fornax — evidence-first agent integrity
 
-**What should I believe about what this agent told me, given the evidence actually available?**
+![Dogfooding](https://img.shields.io/badge/status-Dogfooding-3b7a57?style=flat-square) ![release](https://img.shields.io/github/v/release/horonomy/fornax-core?include_prereleases&style=flat-square&label=release) ![Rust](https://img.shields.io/badge/Rust-orange?style=flat-square&logo=rust&logoColor=white)
 
-Fornax watches a coding agent session in real time, captures immutable evidence (tool calls, exit codes, transcripts), and checks the agent's own claims against that evidence — surfacing `VERIFIED` / `UNVERIFIED` / `CONTRADICTED` / `REVIEW` / `UNAVAILABLE`. Never a made-up trust score.
+Coding agents can claim success even when their own tool output says otherwise. Fornax watches a session in real time, captures immutable evidence, and checks each claim against it — returning `VERIFIED`, `UNVERIFIED`, `CONTRADICTED`, or `UNAVAILABLE`. Missing evidence is `UNAVAILABLE`, not a pass.
 
-The five-state vocabulary matters: missing evidence is `UNAVAILABLE`, not a pass. A claim with no supporting evidence is `UNVERIFIED`, not believed. A claim that contradicts the tool output record is `CONTRADICTED`.
+**Current boundary:** Only exit-code evidence is captured today; the ablation benchmark confirms 22% recall on ground-truth-positive cases.
 
-```
-CLAIM: "All tests passed."
-EVIDENCE: exit_code=1, stderr="test failed"
-VERDICT: ✕ CONTRADICTED
-```
-
-```
-STATUS      🐕 Dogfooding
-RELEASE     v0.0.7  ·  2026-09-24
-STACK       Rust  ·  local daemon  ·  SQLite/WAL  ·  Claude Code + Codex adapters
-VALIDATED   Working daemon; contradiction detection; immutable evidence store; Quick Start reproduces the core claim on a local machine; 22 ADRs; ablation benchmark with pinned assertions
-LIMITS      Only exit-code evidence is produced by shipped adapters today — the ablation benchmark measures 22% recall on ground-truth-positive cases; other evidence kinds (file diffs, process observations) are declared but not yet captured; v0.0.1 series; no external adoption
-```
-
-[source](https://github.com/horonomy/fornax-core) · [architecture invariants](https://github.com/horonomy/fornax-core/blob/main/docs/adr/0001-architecture-invariants.md) · [22 ADRs](https://github.com/horonomy/fornax-core/tree/main/docs/adr)
+[source](https://github.com/horonomy/fornax-core) · [architecture invariants](https://github.com/horonomy/fornax-core/blob/main/docs/adr/0001-architecture-invariants.md)
 
 ---
 
 ### ⚙️ Agent Assembly — governance-native AI agent runtime
 
-**What is this agent allowed to do? What did it actually do? Is that audit trail verifiable?**
+![Developer Preview](https://img.shields.io/badge/status-Developer%20Preview-4a6fa5?style=flat-square) ![release](https://img.shields.io/github/v/release/ai-agent-assembly/agent-assembly?include_prereleases&style=flat-square&label=release) ![Rust](https://img.shields.io/badge/Rust-orange?style=flat-square&logo=rust&logoColor=white)
 
-Agent Assembly provides runtime governance for AI agents: policy enforcement on every action, a hash-chained tamper-evident audit trail, and layered mechanisms (SDK shim, sidecar proxy, eBPF) deployable independently. An absent mechanism is reported as absent — nothing underneath silently picks up what it would have done.
+Agents need execution freedom without unconstrained authority. Agent Assembly enforces policy on every agent action, records a tamper-evident audit trail, and exposes layered enforcement mechanisms — each one explicitly stating its capability boundary. An absent mechanism is reported absent, not silently replaced.
 
-A design note on honesty: where a mechanism intercepts but does not block before execution, the README says so. ADR 0033 logs a truthfulness bug — a CONNECT-level event being written as `allow` when the payload was not inspected — awaiting a code fix. That a specification document contains its own known defects is a deliberate engineering choice.
+**Current boundary:** RC series — API not stable; eBPF terminates processes after the fact, not before.
 
-```
-STATUS      🟠 Developer Preview
-RELEASE     v0.0.1-rc.7  ·  2026-09-17
-STACK       Rust  ·  CLI (aasm)  ·  runtime + proxy + eBPF  ·  gRPC + PolicyBundle
-CHANNELS    crates.io · Homebrew tap · PyPI · npm · GHCR  (all at rc version)
-VALIDATED   CLI + runtime on Linux and macOS; sidecar proxy (Linux+macOS); eBPF observation on Linux; hash-chained audit; developer-tool integration lifecycle
-LIMITS      v0.0.1-rc — API and wire protocol not stable; eBPF terminates processes asynchronously, not pre-execution; no prebuilt macOS proxy binary on any channel; no macOS host-level enforcement
-```
-
-[source](https://github.com/ai-agent-assembly/agent-assembly) · [architecture + enforcement matrix](https://github.com/ai-agent-assembly/agent-assembly/blob/main/docs/src/architecture/README.md) · [limitations and known bypasses](https://github.com/ai-agent-assembly/agent-assembly/blob/main/docs/src/devtools/limitations.md)
+[source](https://github.com/ai-agent-assembly/agent-assembly) · [limitations and known bypasses](https://github.com/ai-agent-assembly/agent-assembly/blob/main/docs/src/devtools/limitations.md)
 
 ---
 
 ### 🛡️ Eltanin — compute authorization and enforcement
 
-**No protected compute without authorization.**
+![MVP Development](https://img.shields.io/badge/status-MVP%20Development-c05820?style=flat-square) ![release](https://img.shields.io/github/v/release/horonomy/eltanin?include_prereleases&style=flat-square&label=release) ![Rust](https://img.shields.io/badge/Rust-orange?style=flat-square&logo=rust&logoColor=white)
 
-Eltanin is a local-first authorization and enforcement layer for protected compute (NVIDIA GPUs on Linux; Apple Silicon Metal on macOS for functional validation). A workload must go through the `eltanin run` authorization path — with a scoped, expiring lease — or the device stays protected. No cloud control plane in the hot path.
+Protected compute should not depend on users voluntarily following an approved execution path. Eltanin is a local-first authorization layer for GPU compute — a workload must hold a scoped, expiring lease or the device stays closed. No cloud control plane in the enforcement hot path.
 
-A note on what has and has not been proven: `SECURITY_MODEL.md` opens with "No claim below is validated yet. Every 'Claimed: denied' here is the *target* F-M1-007 is built to, pending HORO-841's hardware spike." Apple Silicon / Metal provides real functional evidence (E2), but device-level enforcement is the hardware spike on bare-metal Linux / NVIDIA (E3) — that is the mandatory security gate and it is not replaceable by macOS evidence. An Apple-only PASS is `BLOCKED ON E3`, never `READY`.
+**Current boundary:** The Linux/NVIDIA enforcement crates have not been merged; device-level enforcement is not yet proven on hardware.
 
-"Compatibility is not protection" — a platform being functionally supported never means device-level enforcement is claimed for it.
-
-```
-STATUS      🚧 MVP Development
-RELEASE     v0.2.0-preview  ·  2026-09-20
-STACK       Rust  ·  cgroup v2 device-BPF  ·  local IPC protocol  ·  CLI
-VALIDATED   Authorization happy path; ALLOW/DENY flow; IPC protocol; Apple Silicon Metal functional (E2); privileged daemon; 8 ADRs
-LIMITS      The NVIDIA backend crate (eltanin-nvidia) and the eBPF device guard (eltanin-device-guard) have not yet been merged into the workspace — the enforcement code is still in progress; NVIDIA/Linux device-level enforcement (E3 — the mandatory security gate) is not yet proven on hardware; single-host scope only
-EXPLICIT NON-GOALS  AMD/Intel, Windows, SaaS control plane, enterprise RBAC, Kubernetes
-```
-
-[source](https://github.com/horonomy/eltanin) · [security model](https://github.com/horonomy/eltanin/blob/main/docs/product/SECURITY_MODEL.md) · [ADR-0007 Apple Silicon boundary](https://github.com/horonomy/eltanin/blob/main/docs/adr/0007-apple-silicon-metal-backend.md)
+[source](https://github.com/horonomy/eltanin) · [security model](https://github.com/horonomy/eltanin/blob/main/docs/product/SECURITY_MODEL.md)
 
 ---
 
 ### 🧰 Glomeris — policy-constrained developer storage autopilot
 
-**AI can recommend. Policy decides. Executor verifies. Filesystem reality wins.**
+![Dogfooding](https://img.shields.io/badge/status-Dogfooding-3b7a57?style=flat-square) ![release](https://img.shields.io/github/v/release/Chisanan232/glomeris?style=flat-square&label=release) ![Rust + Swift](https://img.shields.io/badge/Rust%20%2B%20Swift-orange?style=flat-square&logo=rust&logoColor=white)
 
-When a developer machine enters disk pressure, Glomeris discovers reclaimable storage, explains why each candidate is or is not safe to remove, and executes only policy-approved typed cleanup actions — re-measuring actual freed bytes until a target is reached or no safe action remains.
+Disk cleanup is easy to automate badly. Glomeris discovers reclaimable storage on macOS, explains why each candidate is or isn't safe to remove, and executes only policy-approved typed actions. An optional LLM planner may rank candidates; it cannot invent or authorize a deletion.
 
-An optional BYOK LLM planner can rank and explain ambiguous candidates, but it can only select from a typed, closed set of known actions — it can never invent a raw command and can never upgrade a `PROTECTED` resource to safe. The policy layer is not a soft advisory; it is the execution gate.
+**Current boundary:** macOS-only experimental MVP; Homebrew and Docker cache cleanup have architectural constraints that limit what can be safely executed.
 
-```
-STATUS      🐕 Dogfooding
-RELEASE     v0.2.0  ·  2026-09-13
-STACK       Rust  ·  Swift (macOS menu-bar app)  ·  BYOK LLM planner (optional)
-VALIDATED   detect / scan / explain / clean / autopilot on macOS; menu-bar app; policy-constrained execution; founder dogfood reports (2026-09-13, 2026-09-21)
-LIMITS      Experimental MVP; macOS-only; Homebrew cache cleanup is permanently refused at execution (brew cleanup has no path-scope argument — fail-closed design); Docker cache is detect-only, no registered cleanup action; the LLM planner is advisory-only and optional
-```
-
-[source](https://github.com/Chisanan232/glomeris) · [safety model](https://chisanan232.github.io/glomeris/safety_model.html) · [known limitations](https://chisanan232.github.io/glomeris/known_limitations.html) · [docs](https://chisanan232.github.io/glomeris/)
+[source](https://github.com/Chisanan232/glomeris) · [safety model](https://chisanan232.github.io/glomeris/safety_model.html) · [known limitations](https://chisanan232.github.io/glomeris/known_limitations.html)
 
 ---
 
 ### 📐 Requirement Zero — engineering methodology as agent skill
 
-**Every requirement must earn its right to exist.**
+![Developer Preview](https://img.shields.io/badge/status-Developer%20Preview-4a6fa5?style=flat-square) ![release](https://img.shields.io/github/v/release/Chisanan232/requirement-zero?style=flat-square&label=release) ![Claude Code skill](https://img.shields.io/badge/Claude%20Code%20skill-black?style=flat-square)
 
-Before Requirement #1 comes Requirement #0: prove the requirement deserves to exist. Two Claude Code skills delivered as Markdown (no package, server, or runtime):
+Coding agents can efficiently build things that should never have existed. Requirement Zero challenges a requirement before planning or writing code; Codebase Zero audits existing artifacts and asks the same question. Both are Claude Code skills — no package, server, or runtime.
 
-- **Requirement Zero** — challenges a requirement before planning or code. Five verdicts: DELETE, REDUCE, DEFER, BUILD, BUILD HARD.
-- **Codebase Zero** — audits an existing artifact and asks whether it still deserves to. Six verdicts: DELETE, CONSOLIDATE, SIMPLIFY, DEFER CLEANUP, KEEP, INVEST.
+**Current boundary:** Evaluation on six cases shows modest accuracy improvement; downstream cost savings are unmeasured.
 
-The evaluation is worth examining for how it is reported as much as for what it found. The first evaluation run was discovered to be contaminated by an ambient `CLAUDE.md` file in the working directory — it was superseded with a clean re-run that produced less favorable numbers. The less favorable numbers are the ones published.
-
-Aggregate across 36 calls (claude-sonnet-4-6, 6 cases × 2 arms × 3 runs): skill arm improved from 4/6 to 4/6 majority-correct cases — same headline number, with one case flipped each direction. The documented twelve-point limitations section includes: tiny N, single model, no downstream cost measured, baseline deliberately primed.
-
-```
-STATUS      🟠 Developer Preview
-RELEASE     v0.2.0  ·  2026-08-16
-TECH        Claude Code skills (Markdown) · eval harness (Python stdlib)
-VALIDATED   36-call eval (Requirement Zero); 42-call eval (Codebase Zero); contamination-controlled; results and full harness published
-LIMITS      N=3 per cell — no statistical power; single model; downstream implementation saving is explicitly unmeasured; Codebase Zero eval is newer with less validation history
-```
-
-[source](https://github.com/Chisanan232/requirement-zero) · [evaluation results — Requirement Zero](https://github.com/Chisanan232/requirement-zero/blob/main/eval/results/2026-08-15-claude-sonnet-4-6.md) · [evaluation results — Codebase Zero](https://github.com/Chisanan232/requirement-zero/blob/main/eval/codebase-zero/results/2026-08-15-claude-sonnet-4-6.md)
+[source](https://github.com/Chisanan232/requirement-zero) · [evaluation results](https://github.com/Chisanan232/requirement-zero/blob/main/eval/results/2026-08-15-claude-sonnet-4-6.md)
 
 ---
 
 ## How I tend to build
 
-**Evidence before interpretation.**
-Raw observations are recorded before any inference runs against them. In Fornax, adapter events are persisted (append-only) before claim extraction or verification. In Eltanin, authorization evidence is classified by class (E1 simulated / E2 functional / E3 device-level enforcement) — a higher evidence class cannot be substituted for a lower one.
+**Evidence over claims.** Observations are recorded before any interpretation runs. Missing capability is `UNAVAILABLE`, not a pass.
 
-**Limitations belong in the same document as the claims.**
-Eltanin's `SECURITY_MODEL.md` opens with "No claim below is validated yet." Agent Assembly's canonical ADR logs a known truthfulness bug and names the pending fix. Requirement Zero's evaluation superseded its own favorable numbers with less favorable ones after discovering a confound. The limitation section is not a footnote.
+**Failure paths are part of the design.** What happens when enforcement is absent, evidence is missing, or authorization is refused is specified — not left implicit.
 
-**Security boundaries must be stated explicitly, not implied by architecture.**
-"Compatibility is not protection" (Eltanin). An absent enforcement mechanism is reported as absent — nothing underneath silently picks up what it would have done (Agent Assembly). `UNAVAILABLE` is a real verdict state, not silence (Fornax).
+**Security boundaries stay explicit.** Compatibility is not protection. An absent mechanism is reported as absent.
 
-**Local-first critical path.**
-Evidence capture → verification → local verdict must work with all cloud access disabled. Cloud sync, if it exists, is async and best-effort after local validation approves it. This is not a preference; it is a design gate.
-
-**Reviewable changes over history rewrites.**
-Fornax's current implementation was replayed ticket-by-ticket as reviewed PRs after a one-time history normalization. The bootstrap is preserved at `archive-v0.0.1-bootstrap`. The commit history is the design history.
-
-**Negative and inconclusive results are still results.**
-Publishing an evaluation that shows no statistically meaningful effect, after correcting for a confound that made the earlier numbers look better, is harder than publishing the favorable version. It is also the only version that justifies future claims.
+**Negative results stay visible.** An evaluation superseded because its confound made the numbers too favorable is published with the corrected, less favorable results.
 
 ---
 
 ## What I'm currently working through
 
-- Can a coding agent's claims be verified without modifying the agent's own behavior? The Fornax daemon is a test of this: the adapter is a hook, not a wrapper, and the verification happens after the fact.
-
-- Which enforcement point in an agent system actually catches more: in-process SDK shim, sidecar proxy, or kernel-level eBPF? Each reaches further but costs more and has different failure modes. Agent Assembly's layered design is an experiment in making this distinction observable.
-
-- How do you prove "no GPU without authorization" on real hardware, rather than configure a policy that assumes good-faith execution paths? Eltanin has a code answer; it does not yet have a hardware-evidence answer. That gap is the blocking item.
-
-- When a coding agent skill improves verdict accuracy on one evaluation case while degrading it on another — and the net headline number is identical to the baseline — what does that actually tell you about skill efficacy? The Requirement Zero eval results contain exactly this scenario.
-
-- At what point does "local-first, cloud-async" stop being a sound architectural principle and start being a way to defer decisions about trust boundaries that will need to be made eventually?
+- Can a coding agent's claims be verified without modifying the agent's behavior? The Fornax hook model is a test of this.
+- Where in the stack does enforcement actually stop more: in-process SDK, sidecar proxy, or kernel-level eBPF — and what does each genuinely catch vs. observe?
+- How do you prove "no GPU without authorization" on real hardware, not just in code?
 
 ---
 
-## Older systems — still how I build
+## Older systems
 
-### PyFake-API-Server  `·`  🛠️ Maintenance paused
+**[PyFake-API-Server](https://github.com/Chisanan232/PyFake-API-Server)** · 🛠️ Maintenance paused · `v0.4.2` · [PyPI](https://pypi.org/project/fake-api-server/)  
+Configurable mock HTTP server; define API responses in YAML or import from an OpenAPI spec.
 
-> [!IMPORTANT]
-> Active development of this project is currently paused.
-
-A configurable mock HTTP server (Flask or FastAPI) that lets you define API responses in YAML/JSON — or import them from an OpenAPI spec — without writing application code. Useful for frontend development, contract testing, and CI pipelines. Published as `fake-api-server` on PyPI.
-
-What this shows about engineering discipline from 2023–2025: a solo Python project with 12 active GitHub Actions workflows, four test layers (unit, integration, live-MySQL compatibility, E2E using the packaged GitHub Action against itself), SonarCloud, Codecov, and a versioned documentation site. Most of this infrastructure existed before the project reached v0.1.0.
-
-```
-RELEASE   v0.4.2  ·  2025-03-31   (maintenance paused since; active dev was 2023–2025)
-PYPI      fake-api-server  ·  fake-api-server-surveillance
-```
-
-[source](https://github.com/Chisanan232/PyFake-API-Server) · [PyPI](https://pypi.org/project/fake-api-server/)
-
-### multirunnable  `·`  🗃️ Legacy
-
-> [!WARNING]
-> This project is no longer actively maintained.
-
-A Python library that unified multiprocessing, threading, gevent, and asyncio behind a single `RunningMode` enum and executor API — plus synchronization primitives, a retry decorator, and a parallel persistence layer. The `study/` directory still shows the pre-implementation research pattern: write the exploration scripts before committing to the design.
-
-```
-RELEASE   v0.17.0  ·  2022-05-27
-PYPI      multirunnable
-```
-
-[source](https://github.com/Chisanan232/multirunnable) · [PyPI](https://pypi.org/project/multirunnable/)
+**[multirunnable](https://github.com/Chisanan232/multirunnable)** · 🗃️ Legacy · `v0.17.0` · [PyPI](https://pypi.org/project/multirunnable/)  
+Unified Python API across multiprocessing, threading, gevent, and asyncio.
 
 ---
 
@@ -202,4 +107,4 @@ PYPI      multirunnable
 
 **[@horonomy](https://github.com/horonomy)** — Fornax · Eltanin  
 **[@ai-agent-assembly](https://github.com/ai-agent-assembly)** — Agent Assembly  
-**LINE corp.** — Software Engineer (day job)
+Software Engineer · LINE corp.
