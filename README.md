@@ -23,7 +23,8 @@ An AI system's own account of what it did is not independent evidence. Fornax bu
 
 **Current boundary:** Evidence collection today covers execution traces; model-internal reasoning is available only when a provider exposes it and is never fabricated.
 
-[source](https://github.com/horonomy/fornax-core) · [architecture invariants](https://github.com/horonomy/fornax-core/blob/main/docs/adr/0001-architecture-invariants.md) · [trace integrity ↘](#signal-trace-integrity)
+[source](https://github.com/horonomy/fornax-core) · [architecture invariants](https://github.com/horonomy/fornax-core/blob/main/docs/adr/0001-architecture-invariants.md)
+**External signals:** [Reasoning trace integrity — OpenAI](https://arxiv.org/abs/2503.11926) · [Agent monitorability — METR](https://metr.org/blog/2026-01-19-early-work-on-monitorability-evaluations/)
 
 ---
 
@@ -37,7 +38,8 @@ Every AI agent action happens under some authority — but who granted it, under
 
 **Current boundary:** RC series — API not stable; eBPF terminates processes after the fact, not before.
 
-[source](https://github.com/ai-agent-assembly/agent-assembly) · [limitations and known bypasses](https://github.com/ai-agent-assembly/agent-assembly/blob/main/docs/src/devtools/limitations.md) · [agent governance ↘](#signal-agent-governance)
+[source](https://github.com/ai-agent-assembly/agent-assembly) · [limitations and known bypasses](https://github.com/ai-agent-assembly/agent-assembly/blob/main/docs/src/devtools/limitations.md)
+**External signals:** [Agent Control Standard — OWASP](https://genai.owasp.org/resource/agent-control-standard-acs/) · [Agentic misalignment — Anthropic](https://www.anthropic.com/news/agentic-misalignment)
 
 ---
 
@@ -51,7 +53,8 @@ Protected compute — hardware accelerators and other high-value resources — s
 
 **Current boundary:** Enforcement crates not yet merged; device-level proof not yet established on hardware.
 
-[source](https://github.com/horonomy/eltanin) · [security model](https://github.com/horonomy/eltanin/blob/main/docs/product/SECURITY_MODEL.md) · [North Star](https://github.com/horonomy/eltanin/blob/main/docs/product/NORTH_STAR.md) · [compute abuse ↘](#signal-protected-compute)
+[source](https://github.com/horonomy/eltanin) · [security model](https://github.com/horonomy/eltanin/blob/main/docs/product/SECURITY_MODEL.md) · [North Star](https://github.com/horonomy/eltanin/blob/main/docs/product/NORTH_STAR.md)
+**External signal:** [Cloud compute abuse — Microsoft](https://www.microsoft.com/en-us/security/blog/2023/07/25/cryptojacking-understanding-and-defending-against-cloud-compute-resource-abuse/)
 
 ---
 
@@ -63,7 +66,8 @@ Disk cleanup that defers to AI recommendations without a deterministic policy ga
 
 **Current boundary:** macOS-only experimental MVP; Homebrew and Docker cleanup have architectural constraints.
 
-[source](https://github.com/Chisanan232/glomeris) · [safety model](https://chisanan232.github.io/glomeris/safety_model.html) · [known limitations](https://chisanan232.github.io/glomeris/known_limitations.html) · [excessive agency ↘](#signal-excessive-agency)
+[source](https://github.com/Chisanan232/glomeris) · [safety model](https://chisanan232.github.io/glomeris/safety_model.html) · [known limitations](https://chisanan232.github.io/glomeris/known_limitations.html)
+**External signals:** [Excessive Agency — OWASP](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/) · [Agentic misalignment — Anthropic](https://www.anthropic.com/news/agentic-misalignment)
 
 ---
 
@@ -78,6 +82,7 @@ Faster AI-assisted implementation makes it easier to efficiently produce work th
 **Current boundary:** Evaluation on six cases shows modest accuracy improvement; downstream cost savings are unmeasured.
 
 [source](https://github.com/Chisanan232/requirement-zero) · [evaluation results](https://github.com/Chisanan232/requirement-zero/blob/main/eval/results/2026-08-15-claude-sonnet-4-6.md)
+**External signal:** [Capability ≠ judgment — METR](https://metr.org/blog/2026-05-19-frontier-risk-report/)
 
 ---
 
@@ -98,22 +103,6 @@ Faster AI-assisted implementation makes it easier to efficiently produce work th
 - Can AI behavior be independently verified without modifying the system being observed? Coding agents are the current test; the harder question is whether it holds for any observable AI system.
 - Which enforcement point — in-process SDK, proxy, or kernel-level eBPF — genuinely prevents unauthorized agent action, and what does each one actually stop versus observe?
 - How do you prove "no protected compute without authorization" on real hardware rather than in a simulator?
-
----
-
-## Signals behind the work
-
-<a id="signal-trace-integrity"></a>
-**Agent trace integrity** — [Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation](https://arxiv.org/abs/2503.11926), Baker et al. / OpenAI (Mar 2025) · agents in coding environments learn to hide reward hacking within reasoning traces when monitored, motivating evidence collection independent of the agent's own output.
-
-<a id="signal-agent-governance"></a>
-**Agent governance** — [OWASP Agent Control Standard](https://genai.owasp.org/resource/agent-control-standard-acs/) (2026) · agents must be inspectable, traceable, and controllable at runtime; enterprises cannot rely on black-box agents.
-
-<a id="signal-protected-compute"></a>
-**Protected compute abuse** — [Cryptojacking: cloud compute resource abuse](https://www.microsoft.com/en-us/security/blog/2023/07/25/cryptojacking-understanding-and-defending-against-cloud-compute-resource-abuse/), Microsoft Threat Intelligence (2023) · unauthorized GPU use cost organizations $300K+ each.
-
-<a id="signal-excessive-agency"></a>
-**Excessive agency** — [OWASP Excessive Agency (LLM06)](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/) · excessive permissions, functionality, and autonomy cause real damage when AI systems malfunction or are manipulated.
 
 ---
 
