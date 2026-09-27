@@ -23,7 +23,7 @@ An AI system's own account of what it did is not independent evidence. Fornax bu
 
 **Current boundary:** Evidence collection today covers execution traces; model-internal reasoning is available only when a provider exposes it and is never fabricated.
 
-[source](https://github.com/horonomy/fornax-core) · [architecture invariants](https://github.com/horonomy/fornax-core/blob/main/docs/adr/0001-architecture-invariants.md)
+[source](https://github.com/horonomy/fornax-core) · [architecture invariants](https://github.com/horonomy/fornax-core/blob/main/docs/adr/0001-architecture-invariants.md) · [AI behavior ↘](#signal-behavioral-integrity)
 
 ---
 
@@ -37,7 +37,7 @@ Every AI agent action happens under some authority — but who granted it, under
 
 **Current boundary:** RC series — API not stable; eBPF terminates processes after the fact, not before.
 
-[source](https://github.com/ai-agent-assembly/agent-assembly) · [limitations and known bypasses](https://github.com/ai-agent-assembly/agent-assembly/blob/main/docs/src/devtools/limitations.md)
+[source](https://github.com/ai-agent-assembly/agent-assembly) · [limitations and known bypasses](https://github.com/ai-agent-assembly/agent-assembly/blob/main/docs/src/devtools/limitations.md) · [agent governance ↘](#signal-agent-governance)
 
 ---
 
@@ -51,7 +51,7 @@ Protected compute — hardware accelerators and other high-value resources — s
 
 **Current boundary:** Enforcement crates not yet merged; device-level proof not yet established on hardware.
 
-[source](https://github.com/horonomy/eltanin) · [security model](https://github.com/horonomy/eltanin/blob/main/docs/product/SECURITY_MODEL.md) · [North Star](https://github.com/horonomy/eltanin/blob/main/docs/product/NORTH_STAR.md)
+[source](https://github.com/horonomy/eltanin) · [security model](https://github.com/horonomy/eltanin/blob/main/docs/product/SECURITY_MODEL.md) · [North Star](https://github.com/horonomy/eltanin/blob/main/docs/product/NORTH_STAR.md) · [compute abuse ↘](#signal-protected-compute)
 
 ---
 
@@ -63,7 +63,7 @@ Disk cleanup that defers to AI recommendations without a deterministic policy ga
 
 **Current boundary:** macOS-only experimental MVP; Homebrew and Docker cleanup have architectural constraints.
 
-[source](https://github.com/Chisanan232/glomeris) · [safety model](https://chisanan232.github.io/glomeris/safety_model.html) · [known limitations](https://chisanan232.github.io/glomeris/known_limitations.html)
+[source](https://github.com/Chisanan232/glomeris) · [safety model](https://chisanan232.github.io/glomeris/safety_model.html) · [known limitations](https://chisanan232.github.io/glomeris/known_limitations.html) · [excessive agency ↘](#signal-excessive-agency)
 
 ---
 
@@ -101,19 +101,19 @@ Faster AI-assisted implementation makes it easier to efficiently produce work th
 
 ---
 
-<details>
-<summary><strong>Signals behind the work</strong></summary>
-<br>
+## Signals behind the work
 
-**AI behavior integrity** — [Alignment faking in large language models](https://arxiv.org/abs/2412.14093) (Greenblatt et al., Anthropic, Dec 2024). AI systems can behave differently depending on whether they believe they are being observed — making external evidence the only reliable record.
+<a id="signal-behavioral-integrity"></a>
+**AI behavioral integrity** — [Alignment faking in large language models](https://arxiv.org/abs/2412.14093), Greenblatt et al. / Anthropic (Dec 2024) · AI systems may behave strategically depending on observed context, motivating verification independent of the system's own reporting.
 
-**Agent governance** — [OWASP Agent Control Standard](https://genai.owasp.org/resource/agent-control-standard-acs/) (2026). Agents must be inspectable, traceable, and controllable at runtime; enterprises cannot rely on black-box agents operating across their environments.
+<a id="signal-agent-governance"></a>
+**Agent governance** — [OWASP Agent Control Standard](https://genai.owasp.org/resource/agent-control-standard-acs/) (2026) · agents must be inspectable, traceable, and controllable at runtime; enterprises cannot rely on black-box agents.
 
-**Protected compute** — [Cryptojacking: cloud compute resource abuse](https://www.microsoft.com/en-us/security/blog/2023/07/25/cryptojacking-understanding-and-defending-against-cloud-compute-resource-abuse/) (Microsoft Threat Intelligence, 2023). Unauthorized GPU consumption cost targeted organizations over $300,000 each — high-value compute is a security asset requiring authorization, not just allocation.
+<a id="signal-protected-compute"></a>
+**Protected compute abuse** — [Cryptojacking: cloud compute resource abuse](https://www.microsoft.com/en-us/security/blog/2023/07/25/cryptojacking-understanding-and-defending-against-cloud-compute-resource-abuse/), Microsoft Threat Intelligence (2023) · unauthorized GPU use cost organizations $300K+ each.
 
-**Excessive agency** — [OWASP Excessive Agency (LLM06)](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/). Excessive permissions, functionality, and autonomy cause damage when AI systems malfunction or are manipulated — making typed policy constraints a requirement, not a preference.
-
-</details>
+<a id="signal-excessive-agency"></a>
+**Excessive agency** — [OWASP Excessive Agency (LLM06)](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/) · excessive permissions, functionality, and autonomy cause real damage when AI systems malfunction or are manipulated.
 
 ---
 
