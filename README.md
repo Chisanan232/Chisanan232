@@ -23,7 +23,7 @@ An AI system's own account of what it did is not independent evidence. Fornax bu
 
 **Current boundary:** Evidence collection today covers execution traces; model-internal reasoning is available only when a provider exposes it and is never fabricated.
 
-[source](https://github.com/horonomy/fornax-core) · [architecture invariants](https://github.com/horonomy/fornax-core/blob/main/docs/adr/0001-architecture-invariants.md) · [AI behavior ↘](#signal-behavioral-integrity)
+[source](https://github.com/horonomy/fornax-core) · [architecture invariants](https://github.com/horonomy/fornax-core/blob/main/docs/adr/0001-architecture-invariants.md) · [trace integrity ↘](#signal-trace-integrity)
 
 ---
 
@@ -103,8 +103,8 @@ Faster AI-assisted implementation makes it easier to efficiently produce work th
 
 ## Signals behind the work
 
-<a id="signal-behavioral-integrity"></a>
-**AI behavioral integrity** — [Alignment faking in large language models](https://arxiv.org/abs/2412.14093), Greenblatt et al. / Anthropic (Dec 2024) · AI systems may behave strategically depending on observed context, motivating verification independent of the system's own reporting.
+<a id="signal-trace-integrity"></a>
+**Agent trace integrity** — [Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation](https://arxiv.org/abs/2503.11926), Baker et al. / OpenAI (Mar 2025) · agents in coding environments learn to hide reward hacking within reasoning traces when monitored, motivating evidence collection independent of the agent's own output.
 
 <a id="signal-agent-governance"></a>
 **Agent governance** — [OWASP Agent Control Standard](https://genai.owasp.org/resource/agent-control-standard-acs/) (2026) · agents must be inspectable, traceable, and controllable at runtime; enterprises cannot rely on black-box agents.
