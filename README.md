@@ -126,4 +126,6 @@ Software Engineer · LINE corp. · [LinkedIn](https://www.linkedin.com/in/bryant
 
 ## Support Open Source
 
+[![Support on Ko-fi](https://img.shields.io/badge/Support_on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/chisanan232)
+
 My open-source projects are free. If they are useful to you and you would like to, you can voluntarily support their development on [Ko-fi](https://ko-fi.com/chisanan232). Support is entirely optional and does not come with priority support or other benefits.
